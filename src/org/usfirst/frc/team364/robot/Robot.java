@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 
-public class Inp
+public class Input {
 
     static final Joystick leftStick  = new Joystick(0);
     static final Joystick rightStick = new Joystick(1);
@@ -17,7 +17,25 @@ public class Inp
 
 }
 
-public class DriveSystem {
+class HangSystem {
+
+    static final int hm = 0;
+    static final int wm = 0;
+
+    static final VictorSP hangMotor  = new VictorSP(hm);
+    static final VictorSP winchMotor = new VictorSP(wm);
+
+    static void manualHangControl(double power) {
+        hangMotor.set(power);	
+    }
+
+    static void manualWinchControl(double power) {
+        winchMotor.set(power);
+    }
+
+}
+
+class DriveSystem {
 
     static final int lf  = 0;
     static final int lr  = 1;
@@ -121,42 +139,25 @@ class IntakeSystem {
 
 public class Robot extends IterativeRobot {
 	
-    /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
-     */
     public void robotInit() {
-        
     }
     
-	/**
-	 * This autonomous (along with the chooser code above) shows how to select between different autonomous modes
-	 * using the dashboard. The sendable chooser code works with the Java SmartDashboard. If you prefer the LabVIEW
-	 * Dashboard, remove all of the chooser code and uncomment the getString line to get the auto name from the text box
-	 * below the Gyro
-	 *
-	 * You can add additional auto modes by adding additional comparisons to the switch structure below with additional strings.
-	 * If using the SendableChooser make sure to add them to the chooser code above as well.
-	 */
     public void autonomousInit() {
     }
 
-    /**
-     * This function is called periodically during autonomous
-     */
     public void autonomousPeriodic() {
     }
 
-    /**
-     * This function is called periodically during operator control
-     */
     public void teleopPeriodic() {
-    	DriveSystem.drive();
+    	//Run the drive() method of DriveSystem during teleop.
+	DriveSystem.drive();
+
+        switch(shooterMode) {
+
+	}
+     
     }
     
-    /**
-     * This function is called periodically during test mode
-     */
     public void testPeriodic() {
     
     }
