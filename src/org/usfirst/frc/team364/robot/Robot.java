@@ -8,6 +8,38 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Joystick;
 
+class IOMap {
+
+    /*
+     * PWM
+     */
+    static final int lfdm = 0;
+    static final int rfdm = 0;
+    static final int lrdm = 0;
+    static final int rrdm = 0;
+    static final int sm1  = 0;
+    static final int sm2  = 0;
+    static final int im   = 0;
+    static final int pm   = 0;
+    static final int fm   = 0;
+    static final int wm   = 0;
+
+    /*
+     * DIO
+     */
+    static final int ball = 0;
+    static final int lenca= 0;
+    static final int lencb= 0;
+    static final int renca= 0;
+    static final int rencb= 0;
+
+    /*
+     * ANALOG
+     */
+    static final int gyro = 0;
+
+}
+
 class PIDControl {
 
    /*
@@ -57,11 +89,8 @@ class Input {
 
 class HangSystem {
 
-    static final int hm = 0;
-    static final int wm = 0;
-
-    static final VictorSP hangMotor  = new VictorSP(hm);
-    static final VictorSP winchMotor = new VictorSP(wm);
+    static final VictorSP hangMotor  = new VictorSP(IOMap.hm);
+    static final VictorSP winchMotor = new VictorSP(IOMap.wm);
 
     static void manualHangControl(double power) {
         hangMotor.set(power);	
@@ -75,20 +104,13 @@ class HangSystem {
 
 class DriveSystem {
 
-    static final int lf  = 0;
-    static final int lr  = 1;
-    static final int rf = 2;
-    static final int rr  = 3;
-
-    static final int ag = 0;
-
     static double ls = Input.leftStick.getY();
     static double rs = Input.rightStick.getY();
 
-    static final VictorSP leftFront  = new VictorSP(lf);
-    static final VictorSP leftRear   = new VictorSP(lr);
-    static final VictorSP rightFront = new VictorSP(rf);
-    static final VictorSP rightRear  = new VictorSP(rr);
+    static final VictorSP leftFront  = new VictorSP(IOMap.lfdm);
+    static final VictorSP leftRear   = new VictorSP(IOMap.lrdm);
+    static final VictorSP rightFront = new VictorSP(IOMap.rfdm);
+    static final VictorSP rightRear  = new VictorSP(IOMap.rrdm);
 
     static final AnalogGyro gyro = new AnalogGyro(ag);
 
@@ -115,11 +137,8 @@ class DriveSystem {
 
 class ShootSystem {
 
-    static final int sm1 = 0;
-    static final int sm2 = 0;
-
-    static final VictorSP shootMotor1 = new VictorSP(sm1);
-    static final VictorSP shootMotor2 = new VictorSP(sm2);
+    static final VictorSP shootMotor1 = new VictorSP(IOMap.sm1);
+    static final VictorSP shootMotor2 = new VictorSP(IOMap.sm2);
 
     static void speedControl(double power) {
         shootMotor1.set(power);
@@ -135,14 +154,10 @@ class ShootSystem {
 
 class IntakeSystem {
 
-    static final int im = 0;
-    static final int pm = 0;
-    static final int bs = 0;
-
-    static final VictorSP intakeMotor = new VictorSP(im);
-    static final VictorSP pulleyMotor = new VictorSP(pm);
+    static final VictorSP intakeMotor = new VictorSP(IOMap.im);
+    static final VictorSP pulleyMotor = new VictorSP(IOMap.pm);
     
-    static final DigitalInput banner  = new DigitalInput(bs);
+    static final DigitalInput banner  = new DigitalInput(IOMap.ball);
 
     static boolean ballInQueue;
 
