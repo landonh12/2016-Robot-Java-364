@@ -1,15 +1,53 @@
 package org.usfirst.frc.team364.robot;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
 
-public class Input {
+class PIDControl {
+
+   /*
+	* Pseudo code (source Wikipedia)
+	* 
+	*  previous_error = 0
+	*  integral = 0 
+	*  start:
+	*  error = setpoint – PV [actual_position]
+	*  integral = integral + error*dt
+	*  derivative = (error - previous_error)/dt
+	*	 output = Kp*error + Ki*integral + Kd*derivative
+	*  previous_error = error
+	*  wait(dt)
+	*  goto start
+	*  
+	*/
+	
+	static double previous_error = 0;
+	static double error = 0;
+	static double integral = 0;
+	static double derivative = 0;
+	static double output = 0;
+	
+	public void resetPIDControl() {
+		previous_error = 0;
+		integral = 0;
+	}
+	
+	public double PIDController(double Kp, double Ki, double Kd, double setpoint, double process_var) {
+		error = setpoint - process_var;
+		integral = integral + error;
+		derivative = error - previous_error;
+		output = Kp*error + Ki*integral + Kd*derivative;
+		previous_error = error;
+		return output;
+	}
+}
+
+class Input {
 
     static final Joystick leftStick  = new Joystick(0);
     static final Joystick rightStick = new Joystick(1);
@@ -56,21 +94,21 @@ class DriveSystem {
 
     static final RobotDrive rd = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
 
-    static PIDOutput pidTurn;
-    static PIDController pidDrive = new PIDController(0.5, 0.1, 0.1, gyro, pidTurn);
-
+    static PIDControl pid = new PIDControl();
+    static double output;
+    
     static void drive() {
         rd.tankDrive(ls, rs);
     }
 
     static void driveWithGyro(double angle) {
-        pidDrive.setSetpoint(angle);
-        rd.arcadeDrive(ls, pidTurn);
+    	output = pid.PIDController(0.5, 0.1, 0.1, angle, gyro.getAngle());
+        rd.arcadeDrive(ls, output);
     }
 
     static void autoDriveWithGyro(double speed, double angle) {
-        pidDrive.setSetpoint(angle);
-        rd.arcadeDrive(speed, pidTurn);
+    	output = pid.PIDController(0.5, 0.1, 0.1, angle, gyro.getAngle());
+        rd.arcadeDrive(speed, output);
     }
 
 }
@@ -106,29 +144,29 @@ class IntakeSystem {
     
     static final DigitalInput banner  = new DigitalInput(bs);
 
-    static final boolean ballInQueue;
+    static boolean ballInQueue;
 
     static void pulleyControl(double power) {
         pulleyMotor.set(power);
     }
 
     static void intake() {
-        if(banner.get() == FALSE) {
+        if(banner.get() == false) {
             intakeMotor.set(1);
-            ballInQueue = FALSE;
+            ballInQueue = false;
         } else {
             intakeMotor.set(0);
-            ballInQueue = TRUE;
+            ballInQueue = true;
         }
     }
 
     static void outTakeForShoot() {
-        if(banner.get() == TRUE) {
+        if(banner.get() == true) {
             intakeMotor.set(-0.3);
-            ballInQueue = TRUE;
+            ballInQueue = true;
         } else {
             intakeMotor.set(0);
-            ballInQueue = FALSE;
+            ballInQueue = false;
         }
     }
 
@@ -150,16 +188,10 @@ public class Robot extends IterativeRobot {
 
     public void teleopPeriodic() {
     	//Run the drive() method of DriveSystem during teleop.
-	DriveSystem.drive();
-
-        switch(shooterMode) {
-
+    	DriveSystem.drive();
 	}
-     
-    }
     
     public void testPeriodic() {
-    
     }
     
 }
