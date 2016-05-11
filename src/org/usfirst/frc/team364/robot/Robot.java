@@ -89,15 +89,23 @@ class Input {
 
 class HangSystem {
 
-    static final VictorSP hangMotor  = new VictorSP(IOMap.fm);
+    static final VictorSP flipMotor  = new VictorSP(IOMap.fm);
     static final VictorSP winchMotor = new VictorSP(IOMap.wm);
 
-    static void manualHangControl(double power) {
-        hangMotor.set(power);	
+    static void manualFlipControl(double power) {
+        flipMotor.set(power);	
     }
 
     static void manualWinchControl(double power) {
         winchMotor.set(power);
+    }
+
+    static void stopFlipMotor() {
+        flipMotor.set(0);
+    }
+
+    static void stopWinchMotor() {
+        winchMotor.set(0);
     }
 
 }
@@ -196,12 +204,26 @@ class IntakeSystem {
 
 public class Robot extends IterativeRobot {
 	
+    //Class initialization
+    public static Input        input;
+    public static DriveSystem  driveSystem;
+    public static IntakeSystem intakeSystem;
+    public static HangSystem   hangSystem;
+    public static ShootSystem  shootSystem;
+
     //Switch statement variables
-    public int intakeMode = 0;
-    public boolean shootMode = false;
-    public double manualIntakePower = 0;
+    public int     intakeMode        = 0;
+    public boolean shootMode         = false;
+    public double  manualIntakePower = 0;
+    public int     winchMode         = 2;
+    public int     flipMode          = 2;
 
     public void robotInit() {
+        input        = new Input();
+        driveSystem  = new DriveSystem();
+        intakeSystem = new IntakeSystem();
+        hangSystem   = new HangSystem();
+        shootSystem  = new ShootSystem();
     }
     
     public void autonomousInit() {
@@ -214,50 +236,96 @@ public class Robot extends IterativeRobot {
     	
         //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
         //Call the driveWithGyro method if a button is pressed.
-    	if(!Input.leftStick.getRawButton()) {
-            DriveSystem.drive();
-            DriveSystem.gyro.reset();
+    	if(!input.leftStick.getRawButton()) {
+            driveSystem.drive();
+            driveSystem.gyro.reset();
         } else {
-            DriveSystem.driveWithGyro(0);
+            driveSystem.driveWithGyro(0);
         }
-        
+
+        //Hang Logic
+        if(input.controller.getRawButton()) winchMode = 0;
+        else if(input.controller.getRawButton()) winchMode = 1;
+        else winchMode = 2;
+
+        if(input.controller.getRawButton()) flipMode  = 0;
+        else if(input.controller.getRawButton()) flipMode  = 1;
+        else flipMode = 2;
+
+        //Shoot Logic
+        if(shootMode = 1) {
+            if(input.controller.getRawButton()) {
+                shootMode = 2;
+            } else {
+                shootMode = shootMode;
+            }
+        } else {
+            shootMode = shootMode;
+        }
+
         //Intake Logic
         if(shootMode == 0) {
-            if(Input.controller.getRawButton(0)) {
+            if(input.controller.getRawButton(0)) {
                 intakeMode = 1;
             } else {
                 intakeMode = 0;
             }
         }
+        
+        //Hang Controllers
+        switch(winchMode) {
+            case 0:
+                hangSystem.manualWinchControl();
+                break;
+            case 1:
+                hangSystem.manualWinchControl();
+                break;
+            case 2:
+                hangSystem.stopWinchMotor();
+                break;
+        }
+
+        switch(flipMode) {
+            case 0:
+                hangSystem.manualFlipControl();
+                break;
+            case 1:
+                hangSystem.manualFlipControl();
+                break;
+            case 2:
+                hangSystem.stopFlipMotor();
+                break;
+        }
 
         //Intake Controller
         switch(intakeMode) {
             case 0:
-                IntakeSystem.manualIntake(Input.controller.getRawAxis(0);
+                intakeSystem.manualIntake(Input.controller.getRawAxis(0);
                 break;
             case 1:
-                IntakeSystem.intake();
+                intakeSystem.intake();
                 break;
             case 2:
-                IntakeSystem.outTakeForShoot();
+                intakeSystem.outTakeForShoot();
                 break;
             case 3:
-                IntakeSystem.manualIntake(1);
+                intakeSystem.manualIntake(1);
                 break;
         }
         
         //Shoot Controller
         switch(shootMode) {
             case 0:
-               ShootSystem.stopShooterMotors();
+               shootSystem.stopShooterMotors();
                break;
             case 1:
-               ShootSystem.speedControl(0.9);
+               shootSystem.speedControl(0.9);
                intakeMode = 2;
                break;
             case 2:
-               ShootSystem.speedControl(0.9);
+               shootSystem.speedControl(0.9);
                intakeMode = 3;
+               if(intakeSystem.banner.get()) shootMode = 0;
                break;
         }
 
