@@ -234,24 +234,31 @@ public class Robot extends IterativeRobot {
         switch(intakeMode) {
             case 0:
                 IntakeSystem.manualIntake(Input.controller.getRawAxis(0);
+                break;
             case 1:
                 IntakeSystem.intake();
+                break;
             case 2:
                 IntakeSystem.outTakeForShoot();
+                break;
             case 3:
                 IntakeSystem.manualIntake(1);
+                break;
         }
         
         //Shoot Controller
         switch(shootMode) {
             case 0:
                ShootSystem.stopShooterMotors();
+               break;
             case 1:
                ShootSystem.speedControl(0.9);
                intakeMode = 2;
+               break;
             case 2:
                ShootSystem.speedControl(0.9);
                intakeMode = 3;
+               break;
         }
 
 	}
