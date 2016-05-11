@@ -89,7 +89,7 @@ class Input {
 
 class HangSystem {
 
-    static final VictorSP hangMotor  = new VictorSP(IOMap.hm);
+    static final VictorSP hangMotor  = new VictorSP(IOMap.fm);
     static final VictorSP winchMotor = new VictorSP(IOMap.wm);
 
     static void manualHangControl(double power) {
@@ -112,7 +112,7 @@ class DriveSystem {
     static final VictorSP rightFront = new VictorSP(IOMap.rfdm);
     static final VictorSP rightRear  = new VictorSP(IOMap.rrdm);
 
-    static final AnalogGyro gyro = new AnalogGyro(ag);
+    static final AnalogGyro gyro = new AnalogGyro(IOMap.gyro);
 
     static final RobotDrive rd = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
 
@@ -167,20 +167,20 @@ class IntakeSystem {
 
     static void intake() {
         if(banner.get() == false) {
-            intakeMotor.set(1);
+            manualIntake(1);
             ballInQueue = false;
         } else {
-            intakeMotor.set(0);
+            stopIntakeMotors();
             ballInQueue = true;
         }
     }
 
     static void outTakeForShoot() {
         if(banner.get() == true) {
-            intakeMotor.set(-0.3);
+            manualIntake(-0.3);
             ballInQueue = true;
         } else {
-            intakeMotor.set(0);
+            stopIntakeMotors()
             ballInQueue = false;
         }
     }
@@ -188,10 +188,19 @@ class IntakeSystem {
     static void manualIntake(double power) {
         intakeMotor.set(power);
     }
+
+    static void stopIntakeMotors() {
+        intakeMotor.set(0);
+    }
 }
 
 public class Robot extends IterativeRobot {
 	
+    //Switch statement variables
+    public int intakeMode = 0;
+    public boolean shootMode = false;
+    public double manualIntakePower = 0;
+
     public void robotInit() {
     }
     
@@ -202,8 +211,49 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopPeriodic() {
-    	//Run the drive() method of DriveSystem during teleop.
-    	DriveSystem.drive();
+    	
+        //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
+        //Call the driveWithGyro method if a button is pressed.
+    	if(!Input.leftStick.getRawButton()) {
+            DriveSystem.drive();
+            DriveSystem.gyro.reset();
+        } else {
+            DriveSystem.driveWithGyro(0);
+        }
+        
+        //Intake Logic
+        if(shootMode == 0) {
+            if(Input.controller.getRawButton(0)) {
+                intakeMode = 1;
+            } else {
+                intakeMode = 0;
+            }
+        }
+
+        //Intake Controller
+        switch(intakeMode) {
+            case 0:
+                IntakeSystem.manualIntake(Input.controller.getRawAxis(0);
+            case 1:
+                IntakeSystem.intake();
+            case 2:
+                IntakeSystem.outTakeForShoot();
+            case 3:
+                IntakeSystem.manualIntake(1);
+        }
+        
+        //Shoot Controller
+        switch(shootMode) {
+            case 0:
+               ShootSystem.stopShooterMotors();
+            case 1:
+               ShootSystem.speedControl(0.9);
+               intakeMode = 2;
+            case 2:
+               ShootSystem.speedControl(0.9);
+               intakeMode = 3;
+        }
+
 	}
     
     public void testPeriodic() {
