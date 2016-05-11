@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Joystick;
 
 class IOMap {
@@ -120,7 +119,7 @@ class DriveSystem {
     static final VictorSP rightFront = new VictorSP(IOMap.rfdm);
     static final VictorSP rightRear  = new VictorSP(IOMap.rrdm);
 
-    static final AnalogGyro gyro = new AnalogGyro(IOMap.gyro);
+    final static AnalogGyro gyro = new AnalogGyro(IOMap.gyro);
 
     static final RobotDrive rd = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
 
@@ -173,7 +172,7 @@ class IntakeSystem {
         pulleyMotor.set(power);
     }
 
-    static void intake() {
+    void intake() {
         if(banner.get() == false) {
             manualIntake(1);
             ballInQueue = false;
@@ -183,21 +182,21 @@ class IntakeSystem {
         }
     }
 
-    static void outTakeForShoot() {
+    void outTakeForShoot() {
         if(banner.get() == true) {
             manualIntake(-0.3);
             ballInQueue = true;
         } else {
-            stopIntakeMotors()
+            stopIntakeMotors();
             ballInQueue = false;
         }
     }
 
-    static void manualIntake(double power) {
+    void manualIntake(double power) {
         intakeMotor.set(power);
     }
 
-    static void stopIntakeMotors() {
+    void stopIntakeMotors() {
         intakeMotor.set(0);
     }
 }
@@ -205,15 +204,15 @@ class IntakeSystem {
 public class Robot extends IterativeRobot {
 	
     //Class initialization
-    public static Input        input;
-    public static DriveSystem  driveSystem;
-    public static IntakeSystem intakeSystem;
-    public static HangSystem   hangSystem;
-    public static ShootSystem  shootSystem;
+    public Input        input;
+    public DriveSystem  driveSystem;
+    public IntakeSystem intakeSystem;
+    public HangSystem   hangSystem;
+    public ShootSystem  shootSystem;
 
     //Switch statement variables
     public int     intakeMode        = 0;
-    public boolean shootMode         = false;
+    public int     shootMode         = 0;
     public double  manualIntakePower = 0;
     public int     winchMode         = 2;
     public int     flipMode          = 2;
@@ -236,7 +235,7 @@ public class Robot extends IterativeRobot {
     	
         //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
         //Call the driveWithGyro method if a button is pressed.
-    	if(!input.leftStick.getRawButton()) {
+    	if(!input.leftStick.getRawButton(0)) {
             driveSystem.drive();
             driveSystem.gyro.reset();
         } else {
@@ -244,17 +243,17 @@ public class Robot extends IterativeRobot {
         }
 
         //Hang Logic
-        if(input.controller.getRawButton()) winchMode = 0;
-        else if(input.controller.getRawButton()) winchMode = 1;
+        if(input.controller.getRawButton(0)) winchMode = 0;
+        else if(input.controller.getRawButton(0)) winchMode = 1;
         else winchMode = 2;
 
-        if(input.controller.getRawButton()) flipMode  = 0;
-        else if(input.controller.getRawButton()) flipMode  = 1;
+        if(input.controller.getRawButton(0)) flipMode  = 0;
+        else if(input.controller.getRawButton(0)) flipMode  = 1;
         else flipMode = 2;
 
         //Shoot Logic
-        if(shootMode = 1) {
-            if(input.controller.getRawButton()) {
+        if(shootMode == 1) {
+            if(input.controller.getRawButton(0)) {
                 shootMode = 2;
             } else {
                 shootMode = shootMode;
@@ -275,10 +274,10 @@ public class Robot extends IterativeRobot {
         //Hang Controllers
         switch(winchMode) {
             case 0:
-                hangSystem.manualWinchControl();
+                hangSystem.manualWinchControl(0);
                 break;
             case 1:
-                hangSystem.manualWinchControl();
+                hangSystem.manualWinchControl(0);
                 break;
             case 2:
                 hangSystem.stopWinchMotor();
@@ -287,10 +286,10 @@ public class Robot extends IterativeRobot {
 
         switch(flipMode) {
             case 0:
-                hangSystem.manualFlipControl();
+                hangSystem.manualFlipControl(0);
                 break;
             case 1:
-                hangSystem.manualFlipControl();
+                hangSystem.manualFlipControl(0);
                 break;
             case 2:
                 hangSystem.stopFlipMotor();
@@ -300,7 +299,7 @@ public class Robot extends IterativeRobot {
         //Intake Controller
         switch(intakeMode) {
             case 0:
-                intakeSystem.manualIntake(Input.controller.getRawAxis(0);
+                intakeSystem.manualIntake(Input.controller.getRawAxis(0));
                 break;
             case 1:
                 intakeSystem.intake();
