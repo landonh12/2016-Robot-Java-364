@@ -7,6 +7,11 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Joystick;
 
+
+/*
+ * Class: IOMap
+ * Desc: THIS CLASS HOLDS ALL OF THE PORT NUMBERS FOR PWM, ANALOG, AND DIGITAL INPUTS AND OUTPUTS.
+ */
 class IOMap {
 
     /*
@@ -39,35 +44,36 @@ class IOMap {
 
 }
 
-class PIDControl {
 
-   /*
-	* Pseudo code (source Wikipedia)
-	* 
-	*  previous_error = 0
-	*  integral = 0 
-	*  start:
-	*  error = setpoint – PV [actual_position]
-	*  integral = integral + error*dt
-	*  derivative = (error - previous_error)/dt
-	*	 output = Kp*error + Ki*integral + Kd*derivative
-	*  previous_error = error
-	*  wait(dt)
-	*  goto start
-	*  
-	*/
+/*
+ * Class: PIDControl
+ * Desc: PIDCONTROL IS A CLASS CONTAINING A CUSTOM PID METHOD THAT DOESN'T REQUIRE CREATING AN EXTENDED CLASS OF PIDSUBSYSTEM.
+ */
+class PIDControl {
 	
+	/*
+	 * Initialization values
+	 */
 	private double previous_error = 0;
 	private double error = 0;
 	private double integral = 0;
 	private double derivative = 0;
 	private double output = 0;
 	
+	/*
+	 * Resets all PID values.
+	 */
 	public void resetPIDControl() {
 		previous_error = 0;
+		error = 0;
 		integral = 0;
+		derivative = 0;
+		output = 0;
 	}
 	
+	/*
+	 * Runs a PID Loop with the given parameters and returns an output.
+	 */
 	public double PIDController(double Kp, double Ki, double Kd, double setpoint, double process_var) {
 		error = setpoint - process_var;
 		integral = integral + error;
@@ -78,6 +84,10 @@ class PIDControl {
 	}
 }
 
+/*
+ * Class: Input
+ * Desc: INPUT IS A CLASS THAT HOLDS DECLARATIONS FOR JOYSTICKS AT A USB PORT NUMBER.
+ */
 class Input {
 
     public final Joystick leftStick  = new Joystick(0);
@@ -86,6 +96,10 @@ class Input {
 
 }
 
+/*
+ * Class: HangSystem
+ * Desc: HANGSYSTEM IS A CLASS THAT CONTROLS MOTOR OUTPUT TO THE HANGING MECHANISM.
+ */
 class HangSystem {
 
     private final VictorSP flipMotor  = new VictorSP(IOMap.fm);
@@ -109,6 +123,11 @@ class HangSystem {
 
 }
 
+/*
+ * Class: DriveSystem
+ * Desc: DRIVESYSTEM IS A CLASS THAT CONTROLS THE DRIVETRAIN MOTORS. IT INCLUDES METHODS FOR GYRO PID CONTROL AND MANUAL JOYSTICK CONTROL.
+ * 		 IT ALSO CONTROLS ALL GYRO OPERATION.
+ */
 class DriveSystem {
 
     private final VictorSP leftFront  = new VictorSP(IOMap.lfdm);
@@ -138,6 +157,10 @@ class DriveSystem {
 
 }
 
+/*
+ * Class: ShootSystem
+ * Desc: SHOOTSYSTEM IS A CLASS THAT CONTROLS ALL MOTOR OUTPUT TO THE SHOOTER.
+ */
 class ShootSystem {
 
     private final VictorSP shootMotor1 = new VictorSP(IOMap.sm1);
@@ -155,6 +178,10 @@ class ShootSystem {
 
 }
 
+/*
+ * Class: IntakeSystem
+ * Desc: INTAKESYSTEM IS A CLASS THAT CONTROLS ALL INTAKE OPERATION SUCH AS CUSTOM INTAKE MODES AND PULLEY OPERATION.
+ */
 class IntakeSystem {
 
     private final VictorSP intakeMotor = new VictorSP(IOMap.im);
@@ -201,6 +228,10 @@ class IntakeSystem {
     }
 }
 
+/*
+ * Class: Robot
+ * Desc: THIS IS THE MAIN CLASS FOR THE ROBOT. IT CONTROLS GAME STATE AND USES JOYSTICK INPUT TO CONTROL SUBSYSTEM STATES.
+ */
 public class Robot extends IterativeRobot {
 	
     //Class initialization
