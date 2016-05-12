@@ -57,11 +57,11 @@ class PIDControl {
 	*  
 	*/
 	
-	static double previous_error = 0;
-	static double error = 0;
-	static double integral = 0;
-	static double derivative = 0;
-	static double output = 0;
+	private double previous_error = 0;
+	private double error = 0;
+	private double integral = 0;
+	private double derivative = 0;
+	private double output = 0;
 	
 	public void resetPIDControl() {
 		previous_error = 0;
@@ -80,30 +80,30 @@ class PIDControl {
 
 class Input {
 
-    static final Joystick leftStick  = new Joystick(0);
-    static final Joystick rightStick = new Joystick(1);
-    static final Joystick controller = new Joystick(2);
+    public final Joystick leftStick  = new Joystick(0);
+    public final Joystick rightStick = new Joystick(1);
+    public final Joystick controller = new Joystick(2);
 
 }
 
 class HangSystem {
 
-    static final VictorSP flipMotor  = new VictorSP(IOMap.fm);
-    static final VictorSP winchMotor = new VictorSP(IOMap.wm);
+    private final VictorSP flipMotor  = new VictorSP(IOMap.fm);
+    private final VictorSP winchMotor = new VictorSP(IOMap.wm);
 
-    static void manualFlipControl(double power) {
+    public void manualFlipControl(double power) {
         flipMotor.set(power);	
     }
 
-    static void manualWinchControl(double power) {
+    public void manualWinchControl(double power) {
         winchMotor.set(power);
     }
 
-    static void stopFlipMotor() {
+    public void stopFlipMotor() {
         flipMotor.set(0);
     }
 
-    static void stopWinchMotor() {
+    public void stopWinchMotor() {
         winchMotor.set(0);
     }
 
@@ -111,48 +111,44 @@ class HangSystem {
 
 class DriveSystem {
 
-    static double ls = Input.leftStick.getY();
-    static double rs = Input.rightStick.getY();
+    private final VictorSP leftFront  = new VictorSP(IOMap.lfdm);
+    private final VictorSP leftRear   = new VictorSP(IOMap.lrdm);
+    private final VictorSP rightFront = new VictorSP(IOMap.rfdm);
+    private final VictorSP rightRear  = new VictorSP(IOMap.rrdm);
 
-    static final VictorSP leftFront  = new VictorSP(IOMap.lfdm);
-    static final VictorSP leftRear   = new VictorSP(IOMap.lrdm);
-    static final VictorSP rightFront = new VictorSP(IOMap.rfdm);
-    static final VictorSP rightRear  = new VictorSP(IOMap.rrdm);
+    private final AnalogGyro gyro = new AnalogGyro(IOMap.gyro);
 
-    final static AnalogGyro gyro = new AnalogGyro(IOMap.gyro);
+    private final RobotDrive rd = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
 
-    static final RobotDrive rd = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
-
-    static PIDControl pid = new PIDControl();
-    static double output;
+    private PIDControl pid = new PIDControl();
+    private double output;
     
-    static void drive() {
-        rd.tankDrive(ls, rs);
+    public void drive(double leftPower, double rightPower) {
+        rd.tankDrive(leftPower, rightPower);
     }
 
-    static void driveWithGyro(double angle) {
-    	output = pid.PIDController(0.5, 0.1, 0.1, angle, gyro.getAngle());
-        rd.arcadeDrive(ls, output);
-    }
-
-    static void autoDriveWithGyro(double speed, double angle) {
+    public void driveWithGyro(double speed, double angle) {
     	output = pid.PIDController(0.5, 0.1, 0.1, angle, gyro.getAngle());
         rd.arcadeDrive(speed, output);
+    }
+    
+    public void resetGyro() {
+    	gyro.reset();
     }
 
 }
 
 class ShootSystem {
 
-    static final VictorSP shootMotor1 = new VictorSP(IOMap.sm1);
-    static final VictorSP shootMotor2 = new VictorSP(IOMap.sm2);
+    private final VictorSP shootMotor1 = new VictorSP(IOMap.sm1);
+    private final VictorSP shootMotor2 = new VictorSP(IOMap.sm2);
 
-    static void speedControl(double power) {
+    public void speedControl(double power) {
         shootMotor1.set(power);
         shootMotor2.set(power);
     }
 
-    static void stopShooterMotors() {
+    public void stopShooterMotors() {
         shootMotor1.set(0);
         shootMotor2.set(0);
     }
@@ -161,18 +157,18 @@ class ShootSystem {
 
 class IntakeSystem {
 
-    static final VictorSP intakeMotor = new VictorSP(IOMap.im);
-    static final VictorSP pulleyMotor = new VictorSP(IOMap.pm);
+    private final VictorSP intakeMotor = new VictorSP(IOMap.im);
+    private final VictorSP pulleyMotor = new VictorSP(IOMap.pm);
     
-    static final DigitalInput banner  = new DigitalInput(IOMap.ball);
+    private final DigitalInput banner  = new DigitalInput(IOMap.ball);
 
-    static boolean ballInQueue;
+    public boolean ballInQueue;
 
-    static void pulleyControl(double power) {
+    public void pulleyControl(double power) {
         pulleyMotor.set(power);
     }
 
-    void intake() {
+    public void intake() {
         if(banner.get() == false) {
             manualIntake(1);
             ballInQueue = false;
@@ -182,7 +178,7 @@ class IntakeSystem {
         }
     }
 
-    void outTakeForShoot() {
+    public void outTakeForShoot() {
         if(banner.get() == true) {
             manualIntake(-0.3);
             ballInQueue = true;
@@ -192,23 +188,29 @@ class IntakeSystem {
         }
     }
 
-    void manualIntake(double power) {
+    public void manualIntake(double power) {
         intakeMotor.set(power);
     }
 
-    void stopIntakeMotors() {
+    public void stopIntakeMotors() {
         intakeMotor.set(0);
+    }
+    
+    public boolean getBanner() {
+    	return banner.get();
     }
 }
 
 public class Robot extends IterativeRobot {
 	
     //Class initialization
-    public Input        input;
+    public Input 		input;
     public DriveSystem  driveSystem;
     public IntakeSystem intakeSystem;
     public HangSystem   hangSystem;
     public ShootSystem  shootSystem;
+    double ls = input.leftStick.getY();
+    double rs = input.rightStick.getY();
 
     //Switch statement variables
     public int     intakeMode        = 0;
@@ -236,10 +238,10 @@ public class Robot extends IterativeRobot {
         //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
         //Call the driveWithGyro method if a button is pressed.
     	if(!input.leftStick.getRawButton(0)) {
-            driveSystem.drive();
-            driveSystem.gyro.reset();
+            driveSystem.drive(ls, rs);
+            driveSystem.resetGyro();
         } else {
-            driveSystem.driveWithGyro(0);
+            driveSystem.driveWithGyro(ls, 0);
         }
 
         //Hang Logic
@@ -253,13 +255,8 @@ public class Robot extends IterativeRobot {
 
         //Shoot Logic
         if(shootMode == 1) {
-            if(input.controller.getRawButton(0)) {
+            if(input.controller.getRawButton(0))
                 shootMode = 2;
-            } else {
-                shootMode = shootMode;
-            }
-        } else {
-            shootMode = shootMode;
         }
 
         //Intake Logic
@@ -299,7 +296,7 @@ public class Robot extends IterativeRobot {
         //Intake Controller
         switch(intakeMode) {
             case 0:
-                intakeSystem.manualIntake(Input.controller.getRawAxis(0));
+                intakeSystem.manualIntake(input.controller.getRawAxis(0));
                 break;
             case 1:
                 intakeSystem.intake();
@@ -324,7 +321,7 @@ public class Robot extends IterativeRobot {
             case 2:
                shootSystem.speedControl(0.9);
                intakeMode = 3;
-               if(intakeSystem.banner.get()) shootMode = 0;
+               if(intakeSystem.getBanner()) shootMode = 0;
                break;
         }
 
