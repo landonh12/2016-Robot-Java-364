@@ -1,3 +1,10 @@
+/*
+ * 2016-Java-Robot-364
+ * Written by Landon Haugh
+ * A complete rewrite of the 2016 robot in Java.
+ * For educational purposes
+ */
+
 package org.usfirst.frc.team364.robot;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
@@ -348,11 +355,12 @@ public class Robot extends IterativeRobot {
             case 1:
                shootSystem.speedControl(0.9);
                intakeMode = 2;
+               if(!intakeSystem.ballInQueue) shootMode = 2;
                break;
             case 2:
                shootSystem.speedControl(0.9);
                intakeMode = 3;
-               if(intakeSystem.getBanner()) shootMode = 0;
+               if(intakeSystem.ballInQueue) shootMode = 0;
                break;
         }
 
