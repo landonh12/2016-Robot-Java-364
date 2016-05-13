@@ -266,13 +266,16 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
+        intakeMode = 0;
+        shootMode  = 0;
+        winchMode  = 2;
+        flipMode   = 2;
     }
 
     public void autonomousPeriodic() {
     }
 
     public void teleopPeriodic() {
-    	
         //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
         //Call the driveWithGyro method if a button is pressed.
     	if(!input.leftStick.getRawButton(0)) {
@@ -305,7 +308,10 @@ public class Robot extends IterativeRobot {
                 intakeMode = 0;
             }
         }
-        
+
+	}
+
+    public void stateControllers() {
         //Hang Controllers
         switch(winchMode) {
             case 0:
@@ -364,7 +370,7 @@ public class Robot extends IterativeRobot {
                break;
         }
 
-	}
+    }
     
     public void testPeriodic() {
     }
