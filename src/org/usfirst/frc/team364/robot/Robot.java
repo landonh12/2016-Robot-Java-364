@@ -273,6 +273,7 @@ public class Robot extends IterativeRobot {
     }
 
     public void autonomousPeriodic() {
+        stateControllers();
     }
 
     public void teleopPeriodic() {
@@ -308,10 +309,12 @@ public class Robot extends IterativeRobot {
                 intakeMode = 0;
             }
         }
-
+        
+        stateControllers();
 	}
 
     public void stateControllers() {
+
         //Hang Controllers
         switch(winchMode) {
             case 0:
