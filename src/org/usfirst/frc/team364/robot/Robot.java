@@ -24,30 +24,30 @@ class IOMap {
     /*
      * PWM
      */
-    static final int lfdm = 0;
-    static final int rfdm = 0;
+    static final int lfdm = 0; //Side, Position, Drive Motor
+    static final int rfdm = 0; 
     static final int lrdm = 0;
     static final int rrdm = 0;
-    static final int sm1  = 0;
+    static final int sm1  = 0; //Shooter Motor 1/2
     static final int sm2  = 0;
-    static final int im   = 0;
+    static final int im   = 0; //Intake, Pulley Motor
     static final int pm   = 0;
-    static final int fm   = 0;
+    static final int fm   = 0; //Flip, Winch Motor
     static final int wm   = 0;
 
     /*
      * DIO
      */
-    static final int ball = 0;
-    static final int lenca= 0;
-    static final int lencb= 0;
-    static final int renca= 0;
-    static final int rencb= 0;
+    static final int ball = 0; //Banner Sensor
+    static final int laenc= 0; //Side, Channel, Encoder
+    static final int lbenc= 0;
+    static final int raenc= 0;
+    static final int rbenc= 0;
 
     /*
      * ANALOG
      */
-    static final int gyro = 0;
+    static final int gyro = 0; //Analog Gyro
 
 }
 
@@ -161,7 +161,10 @@ class DriveSystem {
     public void resetGyro() {
     	gyro.reset();
     }
-
+    
+    public void stopDriveMotors() {
+        drive(0, 0);
+    }
 }
 
 /*
@@ -183,7 +186,7 @@ class ShootSystem {
         shootMotor2.set(0);
     }
 
-}
+
 
 /*
  * Class: IntakeSystem
@@ -249,8 +252,11 @@ public class Robot extends IterativeRobot {
     public ShootSystem  shootSystem;
     double ls = input.leftStick.getY();
     double rs = input.rightStick.getY();
+    int    gyroAngle;
+    int    gyroDriveSpeed;
 
     //Switch statement variables
+    public int     driveMode         = 2;
     public int     intakeMode        = 0;
     public int     shootMode         = 0;
     public double  manualIntakePower = 0;
@@ -266,6 +272,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
+        driveMode  = 2;
         intakeMode = 0;
         shootMode  = 0;
         winchMode  = 2;
@@ -280,10 +287,11 @@ public class Robot extends IterativeRobot {
         //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
         //Call the driveWithGyro method if a button is pressed.
     	if(!input.leftStick.getRawButton(0)) {
-            driveSystem.drive(ls, rs);
-            driveSystem.resetGyro();
+            driveMode = 0;
         } else {
-            driveSystem.driveWithGyro(ls, 0);
+            driveMode = 1;
+            gyroDriveSpeed = ls;
+            gyroAngle = 0;
         }
 
         //Hang Logic
@@ -314,6 +322,20 @@ public class Robot extends IterativeRobot {
 	}
 
     public void stateControllers() {
+        
+        //Drive Controller
+        switch(driveMode) {
+            case 0:
+                driveSystem.drive(ls, rs);
+                driveSystem.resetGyro();
+                break;
+            case 1:
+                driveSystem.driveWithGyro(gyroDriveSpeed, gyroAngle);
+                break;
+            case 2:
+                driveSystem.stopDriveMotors();
+                break;
+        }
 
         //Hang Controllers
         switch(winchMode) {
