@@ -1,6 +1,6 @@
 package org.usfirst.frc.team364.robot;
 
-class PIDControl {
+public class PIDControl {
 	
 	/*
 	 * Initialization values
