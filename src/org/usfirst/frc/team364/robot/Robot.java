@@ -60,13 +60,19 @@ public class Robot extends IterativeRobot {
         }
 
         //Hang Logic
-        if(input.controller.getRawButton(0)) stateControllers.winchMode = 0;
-        else if(input.controller.getRawButton(0)) stateControllers.winchMode = 1;
-        else stateControllers.winchMode = 2;
+        if(input.controller.getRawButton(0)) 
+            stateControllers.winchMode = 0;
+        else if(input.controller.getRawButton(0)) 
+            stateControllers.winchMode = 1;
+        else 
+            stateControllers.winchMode = 2;
 
-        if(input.controller.getRawButton(0)) stateControllers.flipMode  = 0;
-        else if(input.controller.getRawButton(0)) stateControllers.flipMode  = 1;
-        else stateControllers.flipMode = 2;
+        if(input.controller.getRawButton(0)) 
+            stateControllers.flipMode  = 0;
+        else if(input.controller.getRawButton(0)) 
+            stateControllers.flipMode  = 1;
+        else 
+            stateControllers.flipMode = 2;
 
         //Shoot Logic
         if(shootMode == 1) {
