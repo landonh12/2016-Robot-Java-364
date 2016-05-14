@@ -13,8 +13,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Joystick;
-
-
+import org.usfirst.frc.team364.StateControllers;
 /*
  * Class: IOMap
  * Desc: THIS CLASS HOLDS ALL OF THE PORT NUMBERS FOR PWM, ANALOG, AND DIGITAL INPUTS AND OUTPUTS.
@@ -185,57 +184,6 @@ class ShootSystem {
         shootMotor1.set(0);
         shootMotor2.set(0);
     }
-
-
-
-/*
- * Class: IntakeSystem
- * Desc: INTAKESYSTEM IS A CLASS THAT CONTROLS ALL INTAKE OPERATION SUCH AS CUSTOM INTAKE MODES AND PULLEY OPERATION.
- */
-class IntakeSystem {
-
-    private final VictorSP intakeMotor = new VictorSP(IOMap.im);
-    private final VictorSP pulleyMotor = new VictorSP(IOMap.pm);
-    
-    private final DigitalInput banner  = new DigitalInput(IOMap.ball);
-
-    public boolean ballInQueue;
-
-    public void pulleyControl(double power) {
-        pulleyMotor.set(power);
-    }
-
-    public void intake() {
-        if(banner.get() == false) {
-            manualIntake(1);
-            ballInQueue = false;
-        } else {
-            stopIntakeMotors();
-            ballInQueue = true;
-        }
-    }
-
-    public void outTakeForShoot() {
-        if(banner.get() == true) {
-            manualIntake(-0.3);
-            ballInQueue = true;
-        } else {
-            stopIntakeMotors();
-            ballInQueue = false;
-        }
-    }
-
-    public void manualIntake(double power) {
-        intakeMotor.set(power);
-    }
-
-    public void stopIntakeMotors() {
-        intakeMotor.set(0);
-    }
-    
-    public boolean getBanner() {
-    	return banner.get();
-    }
 }
 
 /*
@@ -245,11 +193,12 @@ class IntakeSystem {
 public class Robot extends IterativeRobot {
 	
     //Class initialization
-    public Input 		input;
-    public DriveSystem  driveSystem;
-    public IntakeSystem intakeSystem;
-    public HangSystem   hangSystem;
-    public ShootSystem  shootSystem;
+    public Input 		    input;
+    public DriveSystem      driveSystem;
+    public IntakeSystem     intakeSystem;
+    public HangSystem       hangSystem;
+    public ShootSystem      shootSystem;
+    public StateControllers stateControllers;
     double ls = input.leftStick.getY();
     double rs = input.rightStick.getY();
     int    gyroAngle;
@@ -269,14 +218,11 @@ public class Robot extends IterativeRobot {
         intakeSystem = new IntakeSystem();
         hangSystem   = new HangSystem();
         shootSystem  = new ShootSystem();
+        stateControllers = new StateControllers(); 
     }
     
     public void autonomousInit() {
-        driveMode  = 2;
-        intakeMode = 0;
-        shootMode  = 0;
-        winchMode  = 2;
-        flipMode   = 2;
+        stateControllers.resetStates();
     }
 
     public void autonomousPeriodic() {
@@ -318,85 +264,9 @@ public class Robot extends IterativeRobot {
             }
         }
         
-        stateControllers();
-	}
-
-    public void stateControllers() {
-        
-        //Drive Controller
-        switch(driveMode) {
-            case 0:
-                driveSystem.drive(ls, rs);
-                driveSystem.resetGyro();
-                break;
-            case 1:
-                driveSystem.driveWithGyro(gyroDriveSpeed, gyroAngle);
-                break;
-            case 2:
-                driveSystem.stopDriveMotors();
-                break;
-        }
-
-        //Hang Controllers
-        switch(winchMode) {
-            case 0:
-                hangSystem.manualWinchControl(0);
-                break;
-            case 1:
-                hangSystem.manualWinchControl(0);
-                break;
-            case 2:
-                hangSystem.stopWinchMotor();
-                break;
-        }
-
-        switch(flipMode) {
-            case 0:
-                hangSystem.manualFlipControl(0);
-                break;
-            case 1:
-                hangSystem.manualFlipControl(0);
-                break;
-            case 2:
-                hangSystem.stopFlipMotor();
-                break;
-        }
-
-        //Intake Controller
-        switch(intakeMode) {
-            case 0:
-                intakeSystem.manualIntake(input.controller.getRawAxis(0));
-                break;
-            case 1:
-                intakeSystem.intake();
-                break;
-            case 2:
-                intakeSystem.outTakeForShoot();
-                break;
-            case 3:
-                intakeSystem.manualIntake(1);
-                break;
-        }
-        
-        //Shoot Controller
-        switch(shootMode) {
-            case 0:
-               shootSystem.stopShooterMotors();
-               break;
-            case 1:
-               shootSystem.speedControl(0.9);
-               intakeMode = 2;
-               if(!intakeSystem.ballInQueue) shootMode = 2;
-               break;
-            case 2:
-               shootSystem.speedControl(0.9);
-               intakeMode = 3;
-               if(intakeSystem.ballInQueue) shootMode = 0;
-               break;
-        }
-
+        StateControllers.run();
     }
-    
+
     public void testPeriodic() {
     }
     

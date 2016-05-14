@@ -1,0 +1,102 @@
+package org.usfirst.frc.team364.robot;
+
+class StateControllers {
+
+    public int driveMode;
+    public int winchMode;
+    public int flipMode;
+    public int intakeMode;
+    public int shootMode;
+
+    /*
+     * Default States:
+     * driveMode  = 2
+     * winchMode  = 2
+     * flipMode   = 2
+     * intakeMode = 0
+     * shootMode  = 0
+     */
+    public void resetStates() {
+        driveMode  = 2;
+        winchMode  = 2;
+        flipMode   = 2;
+        intakeMode = 0;
+        shootMode  = 0;
+    }
+
+    public void run() { 
+        //Drive Controller
+        switch(driveMode) {
+            case 0:
+                driveSystem.drive(ls, rs);
+                driveSystem.resetGyro();
+                break;
+            case 1:
+                driveSystem.driveWithGyro(gyroDriveSpeed, gyroAngle);
+                break;
+            case 2:
+                driveSystem.stopDriveMotors();
+                break;
+        }
+
+        //Hang Controllers
+        switch(winchMode) {
+            case 0:
+                hangSystem.manualWinchControl(0);
+                break;
+            case 1:
+                hangSystem.manualWinchControl(0);
+                break;
+            case 2:
+                hangSystem.stopWinchMotor();
+                break;
+        }
+
+        switch(flipMode) {
+            case 0:
+                hangSystem.manualFlipControl(0);
+                break;
+            case 1:
+                hangSystem.manualFlipControl(0);
+                break;
+            case 2:
+                hangSystem.stopFlipMotor();
+                break;
+        }
+
+        //Intake Controller
+        switch(intakeMode) {
+            case 0:
+                intakeSystem.manualIntake(input.controller.getRawAxis(0));
+                break;
+            case 1:
+                intakeSystem.intake();
+                break;
+            case 2:
+                intakeSystem.outTakeForShoot();
+                break;
+            case 3:
+                intakeSystem.manualIntake(1);
+                break;
+        }
+        
+        //Shoot Controller
+        switch(shootMode) {
+            case 0:
+               shootSystem.stopShooterMotors();
+               break;
+            case 1:
+               shootSystem.speedControl(0.9);
+               intakeMode = 2;
+               if(!intakeSystem.ballInQueue) shootMode = 2;
+               break;
+            case 2:
+               shootSystem.speedControl(0.9);
+               intakeMode = 3;
+               if(intakeSystem.ballInQueue) shootMode = 0;
+               break;
+        }
+
+    }
+
+}
