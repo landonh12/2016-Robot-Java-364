@@ -1,12 +1,22 @@
 package org.usfirst.frc.team364.robot;
 
 class StateControllers {
+	
+    public Input 		input        = new Input();
+    public DriveSystem  driveSystem  = new DriveSystem();
+    public IntakeSystem intakeSystem = new IntakeSystem();
+    public HangSystem   hangSystem   = new HangSystem();
+    public ShootSystem  shootSystem  = new ShootSystem();
 
     public int driveMode;
     public int winchMode;
     public int flipMode;
     public int intakeMode;
     public int shootMode;
+    public double gyroDriveSpeed;
+    public double gyroAngle;
+    double ls = input.leftStick.getY();
+    double rs = input.rightStick.getY();
 
     /*
      * Default States:
@@ -24,7 +34,7 @@ class StateControllers {
         shootMode  = 0;
     }
 
-    public void run() { 
+    public void updateStates() { 
         //Drive Controller
         switch(driveMode) {
             case 0:
