@@ -23,14 +23,6 @@ public class Robot extends IterativeRobot {
     int    gyroAngle;
     double gyroDriveSpeed;
 
-    //Switch statement variables
-    public int     driveMode         = 0;
-    public int     intakeMode        = 0;
-    public int     shootMode         = 0;
-    public double  manualIntakePower = 0;
-    public int     winchMode         = 2;
-    public int     flipMode          = 2;
-
     public void robotInit() {
         input        = new Input();
         driveSystem  = new DriveSystem();
@@ -46,6 +38,10 @@ public class Robot extends IterativeRobot {
 
     public void autonomousPeriodic() {
         stateControllers.updateStates();
+    }
+
+    public void teleopInit() {
+        stateControllers.resetStates();
     }
 
     public void teleopPeriodic() {
