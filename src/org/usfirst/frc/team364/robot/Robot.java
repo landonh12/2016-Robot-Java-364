@@ -88,6 +88,14 @@ public class Robot extends IterativeRobot {
         sc.updateStates();
     }
 
+    public void printStates() {
+        System.out.println("Drive Mode: " + sc.driveMode);
+        System.out.println("Winch Mode: " + sc.winchMode);
+        System.out.println("Flip Mode: " + sc.flipMode);
+        System.out.println("Shoot Mode: " + sc.shootMode);
+        System.out.println("Intake Mode: " + sc.intakeMode);
+    }
+
     public void testPeriodic() {
     }
     
