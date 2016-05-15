@@ -2,7 +2,7 @@ package org.usfirst.frc.team364.robot;
 
 import edu.wpi.first.wpilibj.VictorSP;
 
-public class HangSystem {
+class HangSystem {
 
     private final VictorSP flipMotor  = new VictorSP(IOMap.fm);
     private final VictorSP winchMotor = new VictorSP(IOMap.wm);

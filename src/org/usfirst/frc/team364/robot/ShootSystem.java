@@ -2,7 +2,7 @@ package org.usfirst.frc.team364.robot;
 
 import edu.wpi.first.wpilibj.VictorSP;
 
-public class ShootSystem {
+class ShootSystem {
 
     private final VictorSP shootMotor1 = new VictorSP(IOMap.sm1);
     private final VictorSP shootMotor2 = new VictorSP(IOMap.sm2);

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.VictorSP;
 
-public class DriveSystem {
+class DriveSystem {
 
     private final VictorSP leftFront  = new VictorSP(IOMap.lfdm);
     private final VictorSP leftRear   = new VictorSP(IOMap.lrdm);

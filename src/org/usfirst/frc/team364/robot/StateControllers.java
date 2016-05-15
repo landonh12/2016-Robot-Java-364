@@ -1,6 +1,6 @@
 package org.usfirst.frc.team364.robot;
 
-public class StateControllers {
+class StateControllers {
 	
     public Input 		input        = new Input();
     public DriveSystem  driveSystem  = new DriveSystem();
