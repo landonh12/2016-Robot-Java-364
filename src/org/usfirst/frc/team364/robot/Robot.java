@@ -17,7 +17,7 @@ public class Robot extends IterativeRobot {
     public IntakeSystem     intakeSystem;
     public HangSystem       hangSystem;
     public ShootSystem      shootSystem;
-    public StateControllers stateControllers;
+    public StateControllers sc;
     double ls = input.leftStick.getY();
     double rs = input.rightStick.getY();
     int    gyroAngle;
@@ -29,63 +29,63 @@ public class Robot extends IterativeRobot {
         intakeSystem = new IntakeSystem();
         hangSystem   = new HangSystem();
         shootSystem  = new ShootSystem();
-        stateControllers = new StateControllers(); 
+        sc           = new StateControllers(); 
     }
     
     public void autonomousInit() {
-        stateControllers.resetStates();
+        sc.resetStates();
     }
 
     public void autonomousPeriodic() {
-        stateControllers.updateStates();
+        sc.updateStates();
     }
 
     public void teleopInit() {
-        stateControllers.resetStates();
+        sc.resetStates();
     }
 
     public void teleopPeriodic() {
         //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
         //Call the driveWithGyro method if a button is pressed.
     	if(!input.leftStick.getRawButton(0)) {
-            stateControllers.driveMode = 0;
+            sc.driveMode = 0;
         } else {
-            stateControllers.driveMode = 1;
-            stateControllers.gyroDriveSpeed = ls;
-            stateControllers.gyroAngle = 0;
+            sc.driveMode = 1;
+            sc.gyroDriveSpeed = ls;
+            sc.gyroAngle = 0;
         }
 
         //Hang Logic
         if(input.controller.getRawButton(0)) 
-            stateControllers.winchMode = 0;
+            sc.winchMode = 0;
         else if(input.controller.getRawButton(0)) 
-            stateControllers.winchMode = 1;
+            sc.winchMode = 1;
         else 
-            stateControllers.winchMode = 2;
+            sc.winchMode = 2;
 
         if(input.controller.getRawButton(0)) 
-            stateControllers.flipMode  = 0;
+            sc.flipMode  = 0;
         else if(input.controller.getRawButton(0)) 
-            stateControllers.flipMode  = 1;
+            sc.flipMode  = 1;
         else 
-            stateControllers.flipMode = 2;
+            sc.flipMode = 2;
 
         //Shoot Logic
-        if(shootMode == 1) {
+        if(sc.shootMode == 1) {
             if(input.controller.getRawButton(0))
-                stateControllers.shootMode = 2;
+                sc.shootMode = 2;
         }
 
         //Intake Logic
-        if(shootMode == 0) {
+        if(sc.shootMode == 0) {
             if(input.controller.getRawButton(0)) {
-                stateControllers.intakeMode = 1;
+                sc.intakeMode = 1;
             } else {
-                stateControllers.intakeMode = 0;
+                sc.intakeMode = 0;
             }
         }
         
-        stateControllers.updateStates();
+        sc.updateStates();
     }
 
     public void testPeriodic() {
