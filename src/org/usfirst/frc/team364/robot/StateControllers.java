@@ -15,6 +15,7 @@ class StateControllers {
     public int shootMode;
     public double gyroDriveSpeed;
     public double gyroAngle;
+    public int encoderTicks;
     double ls = input.leftStick.getY();
     double rs = input.rightStick.getY();
 

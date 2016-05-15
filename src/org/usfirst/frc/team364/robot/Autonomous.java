@@ -2,9 +2,9 @@ package org.usfirst.frc.team364.robot;
 
 public class Autonomous {
 
-    private final int TURN_ANGLE;
-    private final int AIM_MULTIPLIER;
-    private final int ENCODER_DISTANCE;
+    private final int TURN_ANGLE = 0;
+    private final int AIM_MULTIPLIER = 0;
+    private final int ENCODER_DISTANCE = 0;
 
     private int sequenceState;
 
