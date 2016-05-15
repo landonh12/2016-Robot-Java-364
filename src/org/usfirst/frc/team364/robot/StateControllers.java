@@ -47,6 +47,8 @@ class StateControllers {
             case 2:
                 driveSystem.stopDriveMotors();
                 break;
+            case 3:
+                driveSystem.driveToEncoderCount(encoderTicks, gyroAngle);
         }
 
         //Hang Controllers

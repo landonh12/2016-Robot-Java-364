@@ -16,17 +16,24 @@ class DriveSystem {
     private final RobotDrive rd = new RobotDrive(leftFront, leftRear, rightFront, rightRear);
 
     private PIDControl pid = new PIDControl();
-    private double output;
+    private double gyroOutput;
+    private double encoderOutput;
     
     public void drive(double leftPower, double rightPower) {
         rd.tankDrive(leftPower, rightPower);
     }
 
     public void driveWithGyro(double speed, double angle) {
-    	output = pid.PIDController(0.5, 0.1, 0.1, angle, gyro.getAngle());
-        rd.arcadeDrive(speed, output);
+    	gyroOutput = pid.PIDController(0.5, 0.1, 0.1, angle, gyro.getAngle());
+        rd.arcadeDrive(speed, gyroOutput);
     }
-    
+
+    public void driveToEncoderCount(double ticks, double angle) {
+        gyroOutput = pid.PIDController(0.5, 0.1, 0.1, angle, gyro.getAngle());
+        encoderOutput = pid.PIDController(0.5, 0.1, 0.1, ticks, gyro.getAngle()); //Should be encoder ticks
+        rd.arcadeDrive(encoderOutput, gyroOutput);
+    }
+
     public void resetGyro() {
     	gyro.reset();
     }
