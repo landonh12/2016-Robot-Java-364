@@ -8,15 +8,11 @@ class StateControllers {
     public HangSystem   hangSystem   = new HangSystem();
     public ShootSystem  shootSystem  = new ShootSystem();
 
-    public enum Mode {
-        MANUAL, GYRO, IN, OUT, OFF, WAIT, SHOOT
-    }
-
-    public Mode driveMode;
-    public Mode winchMode;
-    public Mode flipMode;
-    public Mode intakeMode;
-    public Mode shootMode;
+    public int driveMode;
+    public int winchMode;
+    public int flipMode;
+    public int intakeMode;
+    public int shootMode;
     public double gyroDriveSpeed;
     public double gyroAngle;
     double ls = input.leftStick.getY();
@@ -31,80 +27,82 @@ class StateControllers {
      * shootMode  = 0
      */
     public void resetStates() {
-        driveMode  = OFF;
-        winchMode  = OFF;
-        flipMode   = OFF;
-        intakeMode = OFF;
-        shootMode  = OFF;
+        driveMode  = 0;
+        winchMode  = 0;
+        flipMode   = 0;
+        intakeMode = 0;
+        shootMode  = 0;
     }
 
     public void updateStates() { 
         //Drive Controller
         switch(driveMode) {
-            case MANUAL:
+            case 0:
                 driveSystem.drive(ls, rs);
                 driveSystem.resetGyro();
                 break;
-            case GYRO:
+            case 1:
                 driveSystem.driveWithGyro(gyroDriveSpeed, gyroAngle);
                 break;
-            case OFF:
+            case 2:
                 driveSystem.stopDriveMotors();
                 break;
         }
 
         //Hang Controllers
         switch(winchMode) {
-            case MANUAL:
+            case 0:
                 hangSystem.manualWinchControl(0);
                 break;
-            case OFF:
+            case 1:
                 hangSystem.stopWinchMotor();
                 break;
         }
 
         switch(flipMode) {
-            case MANUAL:
+            case 0:
                 hangSystem.manualFlipControl(0);
                 break;
-            case OFF:
+            case 1:
                 hangSystem.stopFlipMotor();
                 break;
         }
 
         //Intake Controller
         switch(intakeMode) {
-            case MANUAL:
+            case 0:
                 intakeSystem.manualIntake(input.controller.getRawAxis(0));
                 break;
-            case IN:
+            case 1:
                 intakeSystem.intake();
                 break;
-            case OUT:
+            case 2:
                 intakeSystem.outTakeForShoot();
                 break;
-            case SHOOT:
+            case 3:
                 intakeSystem.manualIntake(1);
                 break;
-            case OFF:
-                intakeSystem.stop();
+            case 4:
+                intakeSystem.stopIntakeMotors();
                 break;
         }
         
         //Shoot Controller
         switch(shootMode) {
-            case OFF:
+            case 0:
                shootSystem.stopShooterMotors();
                break;
-            case WAIT:
+            case 1:
                shootSystem.speedControl(0.9);
-               intakeMode = OUT;
-               if(!intakeSystem.ballInQueue) shootMode = 2;
+               intakeMode = 2;
+               if(!intakeSystem.ballInQueue) 
+            	   shootMode = 2;
                break;
-            case SHOOT:
+            case 2:
                shootSystem.speedControl(0.9);
-               intakeMode = SHOOT;
-               if(intakeSystem.ballInQueue) shootMode = 0;
+               intakeMode = 3;
+               if(intakeSystem.ballInQueue) 
+            	   shootMode = 0;
                break;
         }
 

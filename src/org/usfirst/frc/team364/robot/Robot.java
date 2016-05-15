@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
         //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
         //Call the driveWithGyro method if a button is pressed.
     	if(!input.leftStick.getRawButton(0)) {
-            stateControllers.driveMode =  0;
+            stateControllers.driveMode = 0;
         } else {
             stateControllers.driveMode = 1;
             stateControllers.gyroDriveSpeed = ls;
