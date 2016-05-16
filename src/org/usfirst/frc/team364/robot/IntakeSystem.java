@@ -15,6 +15,10 @@ class IntakeSystem {
     public void pulleyControl(double power) {
         pulleyMotor.set(power);
     }
+    
+    public void stopPulley() {
+        pulleyMotor.set(0);
+    }
 
     public void intake() {
         if(banner.get() == false) {

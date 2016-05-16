@@ -8,6 +8,7 @@ class StateControllers {
     public HangSystem   hangSystem   = new HangSystem();
     public ShootSystem  shootSystem  = new ShootSystem();
 
+    public int pulleyMode;
     public int driveMode;
     public int winchMode;
     public int flipMode;
@@ -33,6 +34,7 @@ class StateControllers {
         flipMode   = 0;
         intakeMode = 0;
         shootMode  = 0;
+        pulleyMode = 0;
     }
 
     public void updateStates() { 
@@ -68,6 +70,15 @@ class StateControllers {
                 break;
             case 1:
                 hangSystem.stopFlipMotor();
+                break;
+        }
+
+        switch(pulleyMode) {
+            case 0:
+                intakeSystem.stopPulley();
+                break;
+            case 1:
+                intakeSystem.manualPulley(input.controller.getRawAxis(0));
                 break;
         }
 
