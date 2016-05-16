@@ -41,4 +41,8 @@ class DriveSystem {
     public void stopDriveMotors() {
         drive(0, 0);
     }
+    
+    public int getGyroAngle() {
+        return gyro.getAngle();
+    }
 }

@@ -19,7 +19,7 @@ class StateControllers {
     public int encoderTicks;
     double ls = input.leftStick.getY();
     double rs = input.rightStick.getY();
-
+    double pulleyPower;
     /*
      * Default States:
      * driveMode  = 2
@@ -78,7 +78,7 @@ class StateControllers {
                 intakeSystem.stopPulley();
                 break;
             case 1:
-                intakeSystem.manualPulley(input.controller.getRawAxis(0));
+                intakeSystem.pulleyControl(pulleyPower);
                 break;
         }
 
