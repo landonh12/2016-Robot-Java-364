@@ -2,7 +2,7 @@ package org.usfirst.frc.team364.robot;
 
 class StateControllers {
 	
-    public Input 		input        = new Input();
+    public Input 	input        = new Input();
     public DriveSystem  driveSystem  = new DriveSystem();
     public IntakeSystem intakeSystem = new IntakeSystem();
     public HangSystem   hangSystem   = new HangSystem();

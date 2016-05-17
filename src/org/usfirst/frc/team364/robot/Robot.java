@@ -12,12 +12,13 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 public class Robot extends IterativeRobot {
 	
     //Class initialization
-    public Input 		    input;
+    public Input            input;
     public DriveSystem      driveSystem;
     public IntakeSystem     intakeSystem;
     public HangSystem       hangSystem;
     public ShootSystem      shootSystem;
     public StateControllers sc;
+    public Autonomous       auto;
     double ls = input.leftStick.getY();
     double rs = input.rightStick.getY();
     int    gyroAngle;
@@ -37,7 +38,8 @@ public class Robot extends IterativeRobot {
     }
 
     public void autonomousPeriodic() {
-        sc.updateStates();
+        auto.twoball();	
+	    sc.updateStates();
     }
 
     public void teleopInit() {
@@ -86,6 +88,7 @@ public class Robot extends IterativeRobot {
         }
         
         sc.updateStates();
+        printStates();
     }
 
     public void printStates() {
