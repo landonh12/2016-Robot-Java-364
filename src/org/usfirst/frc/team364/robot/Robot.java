@@ -73,9 +73,9 @@ public class Robot extends IterativeRobot {
             sc.flipMode = 2;
 
         //Shoot Logic
-        if(sc.shootMode == 1) {
+        if(sc.shootMode == 0) {
             if(input.controller.getRawButton(0))
-                sc.shootMode = 2;
+                sc.shootMode = 1;
         }
 
         //Intake Logic
