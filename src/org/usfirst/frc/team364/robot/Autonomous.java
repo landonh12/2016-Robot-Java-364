@@ -17,7 +17,7 @@ public class Autonomous {
                 //Intake down
                 sc.pulleyPower = 1;
                 sc.pulleyMode = 1;
-                Timer.delay(1000);
+                //Timer.delay(1000);
                 sc.pulleyMode = 0;
                 sequenceState = 1;
                 break;
@@ -26,30 +26,36 @@ public class Autonomous {
                 sc.encoderTicks = 1;
                 sc.gyroAngle = 0;
                 sc.driveMode = 3;
+                /*
                 if(driveSystem.encoderTicks >= sc.encoderTicks) {
                     sc.driveMode = 2;
                     sequenceState = 2;
                 }
+                */
                 break;
             case 2:
                 //Turn
                 sc.gyroDriveSpeed = 0;
                 sc.gyroAngle = 40;
                 sc.driveMode = 1;
+                /*
                 if(driveSystem.getAngle == 40) {
                     sc.driveMode = 2;
                     sequenceState = 3;
                 }
+                */
                 break;
             case 3:
                 //Aim
                 sc.gyroDriveSpeed = 0;
                 sc.gyroAngle = 0; //Get angle from NT
                 sc.driveMode = 1;
+                /*
                 if(driveSystem.getAngle == 0) {
                     sc.driveMode = 2;
                     sequenceState = 4;
                 }
+                */
                 break;
             case 4:
                 //Shoot

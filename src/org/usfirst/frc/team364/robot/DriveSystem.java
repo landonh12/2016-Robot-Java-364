@@ -42,7 +42,7 @@ class DriveSystem {
         drive(0, 0);
     }
     
-    public int getGyroAngle() {
+    public double getGyroAngle() {
         return gyro.getAngle();
     }
 }
