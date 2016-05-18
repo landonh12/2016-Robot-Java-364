@@ -29,10 +29,10 @@ class StateControllers {
      * shootMode  = 0
      */
     public void resetStates() {
-        driveMode  = 0;
-        winchMode  = 0;
-        flipMode   = 0;
-        intakeMode = 0;
+        driveMode  = 2;
+        winchMode  = 1;
+        flipMode   = 1;
+        intakeMode = 4;
         shootMode  = 0;
         pulleyMode = 0;
     }

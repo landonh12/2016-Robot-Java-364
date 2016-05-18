@@ -21,7 +21,7 @@ public class Robot extends IterativeRobot {
     public Autonomous       auto;
     double ls = input.leftStick.getY();
     double rs = input.rightStick.getY();
-    int    gyroAngle;
+    double gyroAngle;
     double gyroDriveSpeed;
 
     public void robotInit() {
