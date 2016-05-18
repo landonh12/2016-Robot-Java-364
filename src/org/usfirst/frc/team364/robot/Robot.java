@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 public class Robot extends IterativeRobot {
 	
     //Class initialization
+    public Input            input;
     public StateControllers sc;
     public Autonomous       auto;
     double ls = input.leftStick.getY();
@@ -37,46 +38,7 @@ public class Robot extends IterativeRobot {
     }
 
     public void teleopPeriodic() {
-        //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
-        //Call the driveWithGyro method if a button is pressed.
-    	if(!input.leftStick.getRawButton(0)) {
-            sc.driveMode = 0;
-        } else {
-            sc.driveMode = 1;
-            sc.gyroDriveSpeed = ls;
-            sc.gyroAngle = 0;
-        }
-
-        //Hang Logic
-        if(input.controller.getRawButton(0)) 
-            sc.winchMode = 0;
-        else if(input.controller.getRawButton(0)) 
-            sc.winchMode = 1;
-        else 
-            sc.winchMode = 2;
-
-        if(input.controller.getRawButton(0)) 
-            sc.flipMode  = 0;
-        else if(input.controller.getRawButton(0)) 
-            sc.flipMode  = 1;
-        else 
-            sc.flipMode = 2;
-
-        //Shoot Logic
-        if(sc.shootMode == 0) {
-            if(input.controller.getRawButton(0))
-                sc.shootMode = 1;
-        }
-
-        //Intake Logic
-        if(sc.shootMode == 0) {
-            if(input.controller.getRawButton(0)) {
-                sc.intakeMode = 1;
-            } else {
-                sc.intakeMode = 0;
-            }
-        }
-        
+        input.updateControls();   
         sc.updateStates();
         printStates();
     }
