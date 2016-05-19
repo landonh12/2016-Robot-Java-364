@@ -13,7 +13,6 @@ public class Robot extends IterativeRobot {
 	
     //Class initialization
     public Input            input;
-    public StateControllers sc;
     public Autonomous       auto;
     double ls = input.leftStick.getY();
     double rs = input.rightStick.getY();
@@ -21,34 +20,23 @@ public class Robot extends IterativeRobot {
     double gyroDriveSpeed;
 
     public void robotInit() {
-        sc = new StateControllers(); 
     }
     
     public void autonomousInit() {
-        sc.resetStates();
+    	input.resetStates();
     }
 
     public void autonomousPeriodic() {
         auto.twoball();	
-	    sc.updateStates();
     }
 
     public void teleopInit() {
-        sc.resetStates();
+    	input.resetStates();
     }
 
     public void teleopPeriodic() {
         input.updateControls();   
-        sc.updateStates();
-        printStates();
-    }
-
-    public void printStates() {
-        System.out.println("Drive Mode: " + sc.driveMode);
-        System.out.println("Winch Mode: " + sc.winchMode);
-        System.out.println("Flip Mode: " + sc.flipMode);
-        System.out.println("Shoot Mode: " + sc.shootMode);
-        System.out.println("Intake Mode: " + sc.intakeMode);
+        input.printStates();
     }
 
     public void testPeriodic() {

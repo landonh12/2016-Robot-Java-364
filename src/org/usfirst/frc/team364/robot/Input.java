@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 class Input {
 
+	public StateControllers sc = new StateControllers();
     public final Joystick leftStick  = new Joystick(0);
     public final Joystick rightStick = new Joystick(1);
     public final Joystick controller = new Joystick(2);
@@ -15,7 +16,7 @@ class Input {
             sc.driveMode = 0;
         } else {
             sc.driveMode = 1;
-            sc.gyroDriveSpeed = ls;
+            sc.gyroDriveSpeed = leftStick.getY();
             sc.gyroAngle = 0;
         }
 
@@ -50,4 +51,17 @@ class Input {
         }
         
     }
+    
+    public void resetStates() {
+    	sc.resetStates();
+    }
+    
+    public void printStates() {
+        System.out.println("Drive Mode: " + sc.driveMode);
+        System.out.println("Winch Mode: " + sc.winchMode);
+        System.out.println("Flip Mode: " + sc.flipMode);
+        System.out.println("Shoot Mode: " + sc.shootMode);
+        System.out.println("Intake Mode: " + sc.intakeMode);
+    }
+     
 }
