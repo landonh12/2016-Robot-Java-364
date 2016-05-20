@@ -3,7 +3,7 @@ package org.usfirst.frc.team364.robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.VictorSP;
 
-class IntakeSystem {
+public class IntakeSystem {
 
     private final VictorSP intakeMotor = new VictorSP(IOMap.im);
     private final VictorSP pulleyMotor = new VictorSP(IOMap.pm);

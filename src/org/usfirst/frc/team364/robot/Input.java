@@ -2,7 +2,7 @@ package org.usfirst.frc.team364.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-class Input {
+public class Input {
 
 	public StateControllers sc = new StateControllers();
     public final Joystick leftStick  = new Joystick(0);
