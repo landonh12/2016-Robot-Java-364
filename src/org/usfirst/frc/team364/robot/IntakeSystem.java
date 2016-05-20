@@ -12,6 +12,10 @@ public class IntakeSystem {
 
     public boolean ballInQueue;
 
+    public IntakeSystem() {
+    	//Blank constructor
+    }
+    
     public void pulleyControl(double power) {
         pulleyMotor.set(power);
     }

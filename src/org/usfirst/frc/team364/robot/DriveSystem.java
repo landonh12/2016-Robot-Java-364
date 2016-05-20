@@ -19,6 +19,10 @@ public class DriveSystem {
     private double gyroOutput;
     private double encoderOutput;
     
+    public DriveSystem() {
+    	//Blank constructor
+    }
+    
     public void drive(double leftPower, double rightPower) {
         rd.tankDrive(leftPower, rightPower);
     }

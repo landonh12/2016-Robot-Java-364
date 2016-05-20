@@ -11,6 +11,10 @@ public class PIDControl {
 	private double derivative = 0;
 	private double output = 0;
 	
+	public PIDControl() {
+		//Blank constructor
+	}
+	
 	/*
 	 * Resets all PID values.
 	 */

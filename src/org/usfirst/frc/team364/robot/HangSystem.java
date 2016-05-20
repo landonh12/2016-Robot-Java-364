@@ -7,6 +7,10 @@ public class HangSystem {
     private final VictorSP flipMotor  = new VictorSP(IOMap.fm);
     private final VictorSP winchMotor = new VictorSP(IOMap.wm);
 
+    public HangSystem() {
+    	//Blank constructor
+    }
+    
     public void manualFlipControl(double power) {
         flipMotor.set(power);	
     }

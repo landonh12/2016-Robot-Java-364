@@ -9,6 +9,10 @@ public class Input {
     public final Joystick rightStick = new Joystick(1);
     public final Joystick controller = new Joystick(2);
 
+    public Input() {
+    	//Blank constructor
+    }
+    
     public void updateControls() {
         //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
         //Call the driveWithGyro method if a button is pressed.

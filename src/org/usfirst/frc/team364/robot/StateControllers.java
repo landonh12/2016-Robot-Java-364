@@ -2,7 +2,7 @@ package org.usfirst.frc.team364.robot;
 
 public class StateControllers {
 	
-    public Input 	input        = new Input();
+    public Input 		input        = new Input();
     public DriveSystem  driveSystem  = new DriveSystem();
     public IntakeSystem intakeSystem = new IntakeSystem();
     public HangSystem   hangSystem   = new HangSystem();
@@ -14,24 +14,32 @@ public class StateControllers {
     public int flipMode;
     public int intakeMode;
     public int shootMode;
+    
     public double gyroDriveSpeed;
     public double gyroAngle;
     public int encoderTicks;
+    
     double ls = input.leftStick.getY();
     double rs = input.rightStick.getY();
-    double pulleyPower;
+    double pulleyPower = input.controller.getRawAxis(0);
+    
+    public StateControllers() {
+    	//Blank constructor
+    }
+    
     /*
      * Default States:
      * driveMode  = 2
-     * winchMode  = 2
-     * flipMode   = 2
-     * intakeMode = 0
+     * winchMode  = 1
+     * flipMode   = 1
+     * intakeMode = 4
      * shootMode  = 0
+     * pulleyMode = 0
      */
     public void resetStates() {
         driveMode  = 2;
-        winchMode  = 1;
-        flipMode   = 1;
+        winchMode  = 2;
+        flipMode   = 2;
         intakeMode = 4;
         shootMode  = 0;
         pulleyMode = 0;
@@ -57,18 +65,24 @@ public class StateControllers {
         //Hang Controllers
         switch(winchMode) {
             case 0:
-                hangSystem.manualWinchControl(0);
+                hangSystem.manualWinchControl(1);
                 break;
             case 1:
+            	hangSystem.manualWinchControl(-1);
+            	break;
+            case 2:
                 hangSystem.stopWinchMotor();
                 break;
         }
 
         switch(flipMode) {
             case 0:
-                hangSystem.manualFlipControl(0);
+                hangSystem.manualFlipControl(1);
                 break;
             case 1:
+            	hangSystem.manualFlipControl(-1);
+            	break;
+            case 2:
                 hangSystem.stopFlipMotor();
                 break;
         }
@@ -85,15 +99,19 @@ public class StateControllers {
         //Intake Controller
         switch(intakeMode) {
             case 0:
+            	//Get controller axis for intake
                 intakeSystem.manualIntake(input.controller.getRawAxis(0));
                 break;
             case 1:
+            	//Intake ball until sensor
                 intakeSystem.intake();
                 break;
             case 2:
+            	//Outtake ball for shooter rev up
                 intakeSystem.outTakeForShoot();
                 break;
             case 3:
+            	//Feed ball into shooter
                 intakeSystem.manualIntake(1);
                 break;
             case 4:

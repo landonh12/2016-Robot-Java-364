@@ -7,6 +7,10 @@ public class ShootSystem {
     private final VictorSP shootMotor1 = new VictorSP(IOMap.sm1);
     private final VictorSP shootMotor2 = new VictorSP(IOMap.sm2);
 
+    public ShootSystem() {
+    	//Blank constructor.. don't know if this does anything.
+    }
+    
     public void speedControl(double power) {
         shootMotor1.set(power);
         shootMotor2.set(power);

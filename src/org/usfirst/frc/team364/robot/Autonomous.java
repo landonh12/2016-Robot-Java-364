@@ -4,12 +4,17 @@ public class Autonomous {
 
     private StateControllers sc = new StateControllers();
 
-    private final int TURN_ANGLE = 0;
+    private final int TURN_ANGLE = 40;
+    private final int GYRO_ZERO = 0;
     private final int AIM_MULTIPLIER = 0;
     private final int ENCODER_DISTANCE = 0;
 
     private int sequenceState;
 
+    public Autonomous() {
+    	//Blank constructor
+    }
+    
     public void twoball() {
     
         switch(sequenceState) {
@@ -24,7 +29,7 @@ public class Autonomous {
             case 1:
                 //Go through low bar
                 sc.encoderTicks = 1;
-                sc.gyroAngle = 0;
+                sc.gyroAngle = GYRO_ZERO;
                 sc.driveMode = 3;
                 /*
                 if(driveSystem.encoderTicks >= sc.encoderTicks) {
@@ -36,7 +41,7 @@ public class Autonomous {
             case 2:
                 //Turn
                 sc.gyroDriveSpeed = 0;
-                sc.gyroAngle = 40;
+                sc.gyroAngle = TURN_ANGLE;
                 sc.driveMode = 1;
                 /*
                 if(driveSystem.getAngle == 40) {
