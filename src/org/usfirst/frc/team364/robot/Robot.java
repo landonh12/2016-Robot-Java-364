@@ -11,13 +11,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 
 public class Robot extends IterativeRobot {
 	
-    //Class initialization
     public Input            input;
     public Autonomous       auto;
-    double ls = input.leftStick.getY();
-    double rs = input.rightStick.getY();
-    double gyroAngle;
-    double gyroDriveSpeed;
 
     public void robotInit() {
     }
