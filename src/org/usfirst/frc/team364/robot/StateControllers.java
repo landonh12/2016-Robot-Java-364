@@ -28,19 +28,13 @@ public class StateControllers {
     }
     
     /*
-     * Default States:
-     * driveMode  = 2
-     * winchMode  = 1
-     * flipMode   = 1
-     * intakeMode = 4
-     * shootMode  = 0
-     * pulleyMode = 0
+     * Default States: Stop state is 0
      */
     public void resetStates() {
-        driveMode  = 2;
-        winchMode  = 2;
-        flipMode   = 2;
-        intakeMode = 4;
+        driveMode  = 0;
+        winchMode  = 0;
+        flipMode   = 0;
+        intakeMode = 0;
         shootMode  = 0;
         pulleyMode = 0;
     }
@@ -49,14 +43,14 @@ public class StateControllers {
         //Drive Controller
         switch(driveMode) {
             case 0:
+                driveSystem.stopDriveMotors();
+                break;
+            case 1:
                 driveSystem.drive(ls, rs);
                 driveSystem.resetGyro();
                 break;
-            case 1:
-                driveSystem.driveWithGyro(gyroDriveSpeed, gyroAngle);
-                break;
             case 2:
-                driveSystem.stopDriveMotors();
+                driveSystem.driveWithGyro(gyroDriveSpeed, gyroAngle);
                 break;
             case 3:
                 driveSystem.driveToEncoderCount(encoderTicks, gyroAngle);
@@ -65,26 +59,26 @@ public class StateControllers {
         //Hang Controllers
         switch(winchMode) {
             case 0:
-                hangSystem.manualWinchControl(1);
-                break;
-            case 1:
-            	hangSystem.manualWinchControl(-1);
-            	break;
-            case 2:
                 hangSystem.stopWinchMotor();
                 break;
+            case 1:
+                hangSystem.manualWinchControl(1);
+                break;
+            case 2:
+            	hangSystem.manualWinchControl(-1);
+            	break;
         }
 
         switch(flipMode) {
             case 0:
-                hangSystem.manualFlipControl(1);
-                break;
-            case 1:
-            	hangSystem.manualFlipControl(-1);
-            	break;
-            case 2:
                 hangSystem.stopFlipMotor();
                 break;
+            case 1:
+                hangSystem.manualFlipControl(1);
+                break;
+            case 2:
+            	hangSystem.manualFlipControl(-1);
+            	break;
         }
 
         switch(pulleyMode) {
@@ -99,23 +93,23 @@ public class StateControllers {
         //Intake Controller
         switch(intakeMode) {
             case 0:
+                intakeSystem.stopIntakeMotors();
+                break;
+            case 1:
             	//Get controller axis for intake
                 intakeSystem.manualIntake(input.controller.getRawAxis(0));
                 break;
-            case 1:
+            case 2:
             	//Intake ball until sensor
                 intakeSystem.intake();
                 break;
-            case 2:
+            case 3:
             	//Outtake ball for shooter rev up
                 intakeSystem.outTakeForShoot();
                 break;
-            case 3:
+            case 4:
             	//Feed ball into shooter
                 intakeSystem.manualIntake(1);
-                break;
-            case 4:
-                intakeSystem.stopIntakeMotors();
                 break;
         }
         
