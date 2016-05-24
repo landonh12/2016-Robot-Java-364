@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 
 public class Robot extends IterativeRobot {
 	
-    public Input            input = new Input();
-    public Autonomous       auton = new Autonomous();
+    public Input      input = new Input();
+    public Autonomous auton = new Autonomous();
 
     public void robotInit() {
     }
