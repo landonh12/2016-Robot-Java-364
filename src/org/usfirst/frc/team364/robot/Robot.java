@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 
 public class Robot extends IterativeRobot {
 	
-    public Input            input;
-    public Autonomous       auto;
+    public Input            input = new Input();
+    public Autonomous       auton = new Autonomous();
 
     public void robotInit() {
     }
@@ -22,7 +22,7 @@ public class Robot extends IterativeRobot {
     }
 
     public void autonomousPeriodic() {
-        auto.twoball();	
+        auton.twoball();	
     }
 
     public void teleopInit() {
