@@ -1,4 +1,7 @@
-package org.usfirst.frc.team364.robot;
+package org.usfirst.frc.team364.robot.subsystems;
+
+import org.usfirst.frc.team364.robot.IOMap;
+import org.usfirst.frc.team364.robot.PIDControl;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.RobotDrive;

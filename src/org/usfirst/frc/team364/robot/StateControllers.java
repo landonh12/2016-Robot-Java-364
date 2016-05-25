@@ -1,5 +1,10 @@
 package org.usfirst.frc.team364.robot;
 
+import org.usfirst.frc.team364.robot.subsystems.DriveSystem;
+import org.usfirst.frc.team364.robot.subsystems.HangSystem;
+import org.usfirst.frc.team364.robot.subsystems.IntakeSystem;
+import org.usfirst.frc.team364.robot.subsystems.ShootSystem;
+
 public class StateControllers {
 	
     public Input 		input        = new Input();

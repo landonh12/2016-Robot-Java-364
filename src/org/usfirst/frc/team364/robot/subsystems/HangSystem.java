@@ -1,4 +1,6 @@
-package org.usfirst.frc.team364.robot;
+package org.usfirst.frc.team364.robot.subsystems;
+
+import org.usfirst.frc.team364.robot.IOMap;
 
 import edu.wpi.first.wpilibj.VictorSP;
 
