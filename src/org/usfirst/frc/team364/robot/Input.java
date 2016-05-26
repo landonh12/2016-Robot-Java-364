@@ -1,14 +1,10 @@
 package org.usfirst.frc.team364.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
-
 public class Input {
 
 	public StateControllers sc = new StateControllers();
-    public final Joystick leftStick  = new Joystick(0);
-    public final Joystick rightStick = new Joystick(1);
-    public final Joystick controller = new Joystick(2);
-
+	public InputMap im = new InputMap();
+    
     public Input() {
     	//Blank constructor
     }
@@ -16,43 +12,50 @@ public class Input {
     public void updateControls() {
         //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
         //Call the driveWithGyro method if a button is pressed.
-    	if(!leftStick.getRawButton(0)) {
+    	if(!im.driveButton) {
+            sc.ls = im.lsy;
+            sc.rs = im.rsy;
             sc.driveMode = 0;
         } else {
-            sc.driveMode = 1;
-            sc.gyroDriveSpeed = leftStick.getY();
+            sc.gyroDriveSpeed = im.lsy;
             sc.gyroAngle = 0;
+            sc.driveMode = 1;
         }
 
         //Hang Logic
-        if(controller.getRawButton(0)) 
+        if(im.winchUpButton) 
             sc.winchMode = 0;
-        else if(controller.getRawButton(0)) 
+        else if(im.winchDownButton) 
             sc.winchMode = 1;
         else 
             sc.winchMode = 2;
 
-        if(controller.getRawButton(0)) 
+        if(im.flipUpButton) 
             sc.flipMode  = 0;
-        else if(controller.getRawButton(0)) 
+        else if(im.flipDownButton) 
             sc.flipMode  = 1;
         else 
             sc.flipMode = 2;
 
         //Shoot Logic
         if(sc.shootMode == 0) {
-            if(controller.getRawButton(0))
+            if(im.shootButton)
                 sc.shootMode = 1;
         }
 
         //Intake Logic
         if(sc.shootMode == 0) {
-            if(controller.getRawButton(0)) {
-                sc.intakeMode = 1;
+            if(im.intakeButton) {
+                sc.intakeMode = 2;
             } else {
-                sc.intakeMode = 0;
+            	sc.mi = im.intakeSpeed;
+                sc.intakeMode = 1;
             }
         }
+        
+        //Pulley Logic
+        sc.ps = im.pulleySpeed;
+        sc.pulleyMode = 1;
         
     }
     
