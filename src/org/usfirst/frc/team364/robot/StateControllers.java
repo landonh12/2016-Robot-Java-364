@@ -5,28 +5,32 @@ import org.usfirst.frc.team364.robot.subsystems.HangSystem;
 import org.usfirst.frc.team364.robot.subsystems.IntakeSystem;
 import org.usfirst.frc.team364.robot.subsystems.ShootSystem;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class StateControllers {
 	
-    public Input 		input        = new Input();
-    public DriveSystem  driveSystem  = new DriveSystem();
+    public Input input = new Input();
+    public DriveSystem driveSystem = new DriveSystem();
     public IntakeSystem intakeSystem = new IntakeSystem();
-    public HangSystem   hangSystem   = new HangSystem();
-    public ShootSystem  shootSystem  = new ShootSystem();
+    public HangSystem hangSystem = new HangSystem();
+    public ShootSystem shootSystem = new ShootSystem();
 
-    public int pulleyMode;
-    public int driveMode;
-    public int winchMode;
-    public int flipMode;
-    public int intakeMode;
-    public int shootMode;
+    public int pulleyMode = 0;
+    public int driveMode = 0;
+    public int winchMode = 0;
+    public int flipMode = 0;
+    public int intakeMode = 0;
+    public int shootMode = 0;
     
-    public double gyroDriveSpeed;
-    public double gyroAngle;
-    public int encoderTicks;
+    public double ls = 0;
+    public double rs = 0;
+    public double gyroDriveSpeed = 0;
+    public double gyroAngle = 0;
+    public int encoderTicks = 0;
+    public double ps = 0;
+    public double mi = 0;
     
-    double ls = input.leftStick.getY();
-    double rs = input.rightStick.getY();
-    double pulleyPower = input.controller.getRawAxis(0);
+    int time = 0;
     
     public StateControllers() {
     	//Blank constructor
@@ -86,12 +90,13 @@ public class StateControllers {
             	break;
         }
 
+        //Pulley Controller
         switch(pulleyMode) {
             case 0:
                 intakeSystem.stopPulley();
                 break;
             case 1:
-                intakeSystem.pulleyControl(pulleyPower);
+                intakeSystem.pulleyControl(ps);
                 break;
         }
 
@@ -102,7 +107,7 @@ public class StateControllers {
                 break;
             case 1:
             	//Get controller axis for intake
-                intakeSystem.manualIntake(input.controller.getRawAxis(0));
+                intakeSystem.manualIntake(mi);
                 break;
             case 2:
             	//Intake ball until sensor
@@ -122,11 +127,14 @@ public class StateControllers {
         switch(shootMode) {
             case 0:
                shootSystem.stopShooterMotors();
+               time = 0;
                break;
             case 1:
                shootSystem.speedControl(0.9);
                intakeMode = 2;
-               if(!intakeSystem.ballInQueue) 
+               Timer.delay(0.01);
+               time = time + 1;
+               if(!intakeSystem.ballInQueue && time > 100) 
             	   shootMode = 2;
                break;
             case 2:

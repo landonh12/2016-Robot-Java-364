@@ -1,5 +1,7 @@
 package org.usfirst.frc.team364.robot;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class Autonomous {
 
     private StateControllers sc = new StateControllers();
@@ -20,9 +22,9 @@ public class Autonomous {
         switch(sequenceState) {
             case 0:
                 //Intake down
-                sc.pulleyPower = 1;
+                sc.ps = 1;
                 sc.pulleyMode = 1;
-                //Timer.delay(1000);
+                Timer.delay(1000);
                 sc.pulleyMode = 0;
                 sequenceState = 1;
                 break;

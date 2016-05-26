@@ -15,6 +15,7 @@ public class Robot extends IterativeRobot {
     public Autonomous auton = new Autonomous();
 
     public void robotInit() {
+    	input.resetStates();
     }
     
     public void autonomousInit() {
