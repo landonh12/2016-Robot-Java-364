@@ -1,17 +1,21 @@
 package org.usfirst.frc.team364.robot;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Autonomous {
 
     private StateControllers sc = new StateControllers();
+    private NetworkTable nt = NetworkTable.getTable("/");
 
+    private double visionCenterX = nt.getNumber("visionCenterX", 0);
     private final int TURN_ANGLE = 40;
     private final int GYRO_ZERO = 0;
     private final int AIM_MULTIPLIER = 0;
     private final int ENCODER_DISTANCE = 0;
 
     private int sequenceState;
+    private double aim_angle = visionCenterX * AIM_MULTIPLIER;
 
     public Autonomous() {
     	//Blank constructor
@@ -55,7 +59,7 @@ public class Autonomous {
             case 3:
                 //Aim
                 sc.gyroDriveSpeed = 0;
-                sc.gyroAngle = 0; //Get angle from NT
+                sc.gyroAngle = aim_angle; //Get angle from NT
                 sc.driveMode = 1;
                 /*
                 if(driveSystem.getAngle == 0) {

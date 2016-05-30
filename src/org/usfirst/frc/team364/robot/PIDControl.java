@@ -2,9 +2,7 @@ package org.usfirst.frc.team364.robot;
 
 public class PIDControl {
 	
-	/*
-	 * Initialization values
-	 */
+	// Initialization values
 	private double previous_error = 0;
 	private double error = 0;
 	private double integral = 0;
@@ -15,9 +13,8 @@ public class PIDControl {
 		//Blank constructor
 	}
 	
-	/*
-	 * Resets all PID values.
-	 */
+
+	// Resets all PID values.
 	public void resetPIDControl() {
 		previous_error = 0;
 		error = 0;
@@ -26,9 +23,7 @@ public class PIDControl {
 		output = 0;
 	}
 	
-	/*
-	 * Runs a PID Loop with the given parameters and returns an output.
-	 */
+	// Runs a PID Loop with the given parameters and returns an output.
 	public double PIDController(double Kp, double Ki, double Kd, double setpoint, double process_var) {
 		error = setpoint - process_var;
 		integral = integral + error;

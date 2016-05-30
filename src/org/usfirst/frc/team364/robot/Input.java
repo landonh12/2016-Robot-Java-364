@@ -9,9 +9,14 @@ public class Input {
     	//Blank constructor
     }
     
+    /*
+     * Controls the states running in the StateControllers class. Every time the main class
+     * updates, it will run updateControls(). It will get inputs from the controllers specified
+     * in InputMap, update state values, then run the updateStates() method in StateControllers.
+     */
     public void updateControls() {
-        //Run the drive() method of DriveSystem during teleop. Reset the gyro for driveWithGyro.
-        //Call the driveWithGyro method if a button is pressed.
+    	
+    	//Drive logic
     	if(!im.driveButton) {
             sc.ls = im.lsy;
             sc.rs = im.rsy;
@@ -56,6 +61,9 @@ public class Input {
         //Pulley Logic
         sc.ps = im.pulleySpeed;
         sc.pulleyMode = 1;
+        
+        sc.updateStates();
+        sc.resetStates();
         
     }
     

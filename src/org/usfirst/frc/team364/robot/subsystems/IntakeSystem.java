@@ -38,7 +38,7 @@ public class IntakeSystem {
 
     public void outTakeForShoot() {
         if(banner.get() == true) {
-            manualIntake(-0.3);
+            manualIntake(-0.8);
             ballInQueue = true;
         } else {
             stopIntakeMotors();
